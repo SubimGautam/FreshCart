@@ -17,6 +17,8 @@ const sortOptions = [
   { value: 'popularity', label: 'Most Popular' },
 ];
 
+const defaultFilters = { category: '', minPrice: '', maxPrice: '', minRating: '' };
+
 const DashboardPage = () => {
   const { user } = useAuth();
   const { addToCart } = useCart();
@@ -31,10 +33,8 @@ const DashboardPage = () => {
   const [showFilters, setShowFilters] = useState(false);
 
   const [filters, setFilters] = useState({
+    ...defaultFilters,
     category: searchParams.get('category') || '',
-    minPrice: '',
-    maxPrice: '',
-    minRating: '',
   });
 
   const fetchProducts = async () => {
@@ -65,6 +65,19 @@ const DashboardPage = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filters, sort]);
 
+  // Fired by Navbar when the logo is clicked while already on this page.
+  useEffect(() => {
+    const handleReset = () => {
+      setFilters(defaultFilters);
+      setSearch('');
+      setSort('newest');
+      setSearchParams({});
+    };
+    window.addEventListener('freshcart:reset-dashboard', handleReset);
+    return () => window.removeEventListener('freshcart:reset-dashboard', handleReset);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     setSearchParams(search ? { search } : {});
@@ -82,14 +95,14 @@ const DashboardPage = () => {
   return (
     <div>
       <div className="bg-cream border-b border-stone-200">
-        <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-6 py-10">
+        <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-10 py-10">
           <span className="text-xs font-semibold uppercase tracking-[0.15em] text-primary-600">Welcome back</span>
           <h1 className="text-3xl font-display font-semibold text-ink mt-1">Hey {user?.name?.split(' ')[0]}</h1>
           <p className="text-ink/55 mt-1">Let's find you some fresh groceries today.</p>
         </div>
       </div>
 
-      <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-6 py-8">
+      <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-10 py-8">
         <div className="flex flex-col sm:flex-row gap-3 mb-6">
           <form onSubmit={handleSearchSubmit} className="flex-1 relative">
             <Search className="w-4 h-4 text-ink/35 absolute left-4 top-1/2 -translate-y-1/2" strokeWidth={1.75} />

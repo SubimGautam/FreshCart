@@ -4,13 +4,24 @@ const Order = require('../models/Order');
 
 const DELIVERY_FEE = 4.99;
 const FREE_DELIVERY_THRESHOLD = 50;
+const VALID_PAYMENT_METHODS = ['cash_on_delivery', 'esewa', 'mobile_banking'];
 
 const placeOrder = async (req, res, next) => {
   try {
-    const { shippingAddress, paymentMethod } = req.body;
+    const { shippingAddress, paymentMethod, fulfillmentMethod = 'delivery' } = req.body;
 
-    if (!shippingAddress || !shippingAddress.line1 || !shippingAddress.city || !shippingAddress.postalCode) {
-      return res.status(400).json({ message: 'A complete shipping address is required' });
+    if (!['delivery', 'pickup'].includes(fulfillmentMethod)) {
+      return res.status(400).json({ message: 'Invalid fulfillment method' });
+    }
+
+    if (fulfillmentMethod === 'delivery') {
+      if (!shippingAddress || !shippingAddress.line1 || !shippingAddress.city || !shippingAddress.postalCode) {
+        return res.status(400).json({ message: 'A complete shipping address is required' });
+      }
+    }
+
+    if (paymentMethod && !VALID_PAYMENT_METHODS.includes(paymentMethod)) {
+      return res.status(400).json({ message: 'Invalid payment method' });
     }
 
     const user = await User.findById(req.user._id).populate('cart.product');
@@ -40,13 +51,14 @@ const placeOrder = async (req, res, next) => {
       itemsTotal += product.price * cartItem.quantity;
     }
 
-    const deliveryFee = itemsTotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE;
+    const deliveryFee = fulfillmentMethod === 'pickup' || itemsTotal >= FREE_DELIVERY_THRESHOLD ? 0 : DELIVERY_FEE;
     const totalAmount = itemsTotal + deliveryFee;
 
     const order = await Order.create({
       user: user._id,
       items: orderItems,
-      shippingAddress,
+      fulfillmentMethod,
+      shippingAddress: fulfillmentMethod === 'delivery' ? shippingAddress : undefined,
       itemsTotal,
       deliveryFee,
       totalAmount,

@@ -15,13 +15,18 @@ const orderSchema = new mongoose.Schema(
       required: true,
     },
     items: [orderItemSchema],
+    fulfillmentMethod: {
+      type: String,
+      enum: ['delivery', 'pickup'],
+      default: 'delivery',
+    },
     shippingAddress: {
-      line1: { type: String, required: true },
+      line1: { type: String },
       line2: { type: String },
-      city: { type: String, required: true },
+      city: { type: String },
       state: { type: String },
-      postalCode: { type: String, required: true },
-      country: { type: String, required: true },
+      postalCode: { type: String },
+      country: { type: String, default: 'Nepal' },
     },
     itemsTotal: { type: Number, required: true },
     deliveryFee: { type: Number, required: true, default: 0 },
@@ -33,7 +38,7 @@ const orderSchema = new mongoose.Schema(
     },
     paymentMethod: {
       type: String,
-      enum: ['cash_on_delivery', 'card'],
+      enum: ['cash_on_delivery', 'esewa', 'mobile_banking'],
       default: 'cash_on_delivery',
     },
     paymentStatus: {

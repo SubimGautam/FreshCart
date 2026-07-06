@@ -16,6 +16,8 @@ import ProductDetailsPage from './pages/ProductDetailsPage';
 import WishlistPage from './pages/WishlistPage';
 import CartPage from './pages/CartPage';
 import CheckoutPage from './pages/CheckoutPage';
+import OrdersPage from './pages/OrdersPage';
+import OrderDetailPage from './pages/OrderDetailPage';
 import ProfilePage from './pages/ProfilePage';
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 import AdminProductsPage from './pages/admin/AdminProductsPage';
@@ -48,6 +50,8 @@ function App() {
               <Route path="/wishlist" element={<StorefrontLayout><ProtectedRoute><WishlistPage /></ProtectedRoute></StorefrontLayout>} />
               <Route path="/cart" element={<StorefrontLayout><ProtectedRoute><CartPage /></ProtectedRoute></StorefrontLayout>} />
               <Route path="/checkout" element={<StorefrontLayout><ProtectedRoute><CheckoutPage /></ProtectedRoute></StorefrontLayout>} />
+              <Route path="/orders" element={<StorefrontLayout><ProtectedRoute><OrdersPage /></ProtectedRoute></StorefrontLayout>} />
+              <Route path="/orders/:id" element={<StorefrontLayout><ProtectedRoute><OrderDetailPage /></ProtectedRoute></StorefrontLayout>} />
               <Route path="/profile" element={<StorefrontLayout><ProtectedRoute><ProfilePage /></ProtectedRoute></StorefrontLayout>} />
 
               <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
