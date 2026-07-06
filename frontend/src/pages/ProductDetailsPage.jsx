@@ -138,7 +138,7 @@ const ProductDetailsPage = () => {
   const percentOff = isOnSale ? Math.round(((product.price - product.discountPrice) / product.price) * 100) : 0;
 
   return (
-    <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-6 py-8">
       <nav className="text-sm text-gray-500 mb-6 font-medium">
         <Link to="/" className="hover:text-primary-600">Home</Link>
         <span className="mx-2">/</span>

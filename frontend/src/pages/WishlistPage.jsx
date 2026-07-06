@@ -28,7 +28,7 @@ const WishlistPage = () => {
   };
 
   return (
-    <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-6 py-8">
       <h1 className="text-3xl font-display font-extrabold text-ink mb-6">❤️ My Wishlist</h1>
 
       {wishlist.length === 0 ? (

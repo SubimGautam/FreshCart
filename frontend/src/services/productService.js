@@ -25,6 +25,11 @@ export const getCategoriesRequest = async () => {
   return res.data;
 };
 
+export const getCategoryListRequest = async () => {
+  const res = await api.get('/categories');
+  return res.data;
+};
+
 export const getProductByIdRequest = async (id) => {
   const res = await api.get(`/products/${id}`);
   return res.data;

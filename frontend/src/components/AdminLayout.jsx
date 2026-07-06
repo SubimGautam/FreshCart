@@ -44,7 +44,6 @@ const AdminLayout = () => {
         </div>
       </aside>
 
-      {/* Mobile top nav */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 bg-ink z-40 flex justify-around py-2 border-t border-white/10">
         {navItems.map((item) => (
           <NavLink

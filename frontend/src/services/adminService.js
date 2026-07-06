@@ -5,7 +5,6 @@ export const getDashboardStatsRequest = async () => {
   return res.data;
 };
 
-// Products (admin)
 export const createProductRequest = async (data) => {
   const res = await api.post('/products', data);
   return res.data;
@@ -21,7 +20,6 @@ export const deleteProductRequest = async (id) => {
   return res.data;
 };
 
-// Categories (admin)
 export const createCategoryRequest = async (data) => {
   const res = await api.post('/categories', data);
   return res.data;
@@ -37,7 +35,6 @@ export const deleteCategoryRequest = async (id) => {
   return res.data;
 };
 
-// Orders (admin)
 export const getAllOrdersRequest = async () => {
   const res = await api.get('/orders/admin/all');
   return res.data;
@@ -48,7 +45,6 @@ export const updateOrderStatusRequest = async (id, status) => {
   return res.data;
 };
 
-// Users (admin)
 export const getAllUsersRequest = async () => {
   const res = await api.get('/users/admin/all');
   return res.data;
@@ -69,7 +65,6 @@ export const deleteUserRequest = async (id) => {
   return res.data;
 };
 
-// Reviews (admin)
 export const getAllReviewsRequest = async () => {
   const res = await api.get('/reviews/admin/all');
   return res.data;

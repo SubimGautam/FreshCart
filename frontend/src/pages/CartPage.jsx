@@ -36,7 +36,7 @@ const CartPage = () => {
 
   if (cart.length === 0) {
     return (
-      <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+      <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-6 py-20 text-center">
         <div className="text-6xl mb-4">🛒</div>
         <h1 className="text-2xl font-display font-extrabold text-ink mb-2">Your cart is empty</h1>
         <p className="text-gray-500 mb-6 font-medium">Looks like you haven't added anything yet.</p>
@@ -48,7 +48,7 @@ const CartPage = () => {
   }
 
   return (
-    <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-6 py-8">
       <h1 className="text-3xl font-display font-extrabold text-ink mb-6">🛒 Your Cart</h1>
 
       <div className="grid lg:grid-cols-[1fr_360px] gap-8">

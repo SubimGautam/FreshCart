@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { Leaf, Heart, ShoppingBag, LayoutDashboard, LogOut } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
@@ -10,7 +11,6 @@ const Navbar = () => {
   const { wishlist } = useWishlist();
   const navigate = useNavigate();
 
-  const [searchTerm, setSearchTerm] = useState('');
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef(null);
 
@@ -30,137 +30,104 @@ const Navbar = () => {
     navigate('/login');
   };
 
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    if (searchTerm.trim()) {
-      navigate(`/dashboard?search=${encodeURIComponent(searchTerm.trim())}`);
-    }
-  };
-
   return (
-    <div className="sticky top-0 z-50">
-      <div className="bg-ink text-flash-400 text-xs font-bold py-1.5 overflow-hidden whitespace-nowrap">
-        <div className="flex animate-marquee">
-          {Array.from({ length: 2 }).map((_, i) => (
-            <span key={i} className="px-8 flex-shrink-0">
-              🔥 FREE DELIVERY ON ORDERS OVER $50 &nbsp;•&nbsp; 🎉 UP TO 30% OFF TODAY ONLY &nbsp;•&nbsp; 🍓 FRESH PICKS DAILY &nbsp;•&nbsp; 🚀 30-MIN DELIVERY
+    <div className="sticky top-0 z-50 bg-cream/95 backdrop-blur-sm border-b border-stone-200">
+      <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-6">
+        <div className="flex justify-between items-center h-16 gap-4">
+          <Link to="/" className="flex items-center gap-2 flex-shrink-0">
+            <span className="w-8 h-8 rounded-full bg-primary-600 flex items-center justify-center">
+              <Leaf className="w-4 h-4 text-white" strokeWidth={2} />
             </span>
-          ))}
-        </div>
-      </div>
+            <span className="text-xl font-display font-semibold text-ink hidden sm:inline">
+              FreshCart
+            </span>
+          </Link>
 
-      <nav className="bg-white border-b-4 border-primary-600 shadow-sm">
-        <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16 gap-4">
-            <Link to="/" className="flex items-center gap-1.5 flex-shrink-0">
-              <span className="text-3xl">🛒</span>
-              <span className="text-2xl font-display font-extrabold text-primary-600 hidden sm:inline">
-                Fresh<span className="text-deal-500">Cart</span>
-              </span>
-            </Link>
+          <div className="flex items-center gap-4 sm:gap-5">
+            {isAuthenticated ? (
+              <>
+                <Link to="/dashboard" className="text-[15px] text-ink/70 hover:text-primary-700 font-medium transition hidden sm:inline">
+                  Shop
+                </Link>
 
-            <form onSubmit={handleSearchSubmit} className="hidden md:flex flex-1 max-w-md">
-              <input
-                type="text"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                placeholder="Search for fresh deals..."
-                className="w-full px-4 py-2 border-2 border-primary-200 rounded-l-full focus:ring-2 focus:ring-primary-400 focus:border-primary-400 outline-none transition text-sm font-medium"
-              />
-              <button
-                type="submit"
-                className="bg-deal-500 hover:bg-deal-600 text-white px-5 rounded-r-full transition font-bold"
-              >
-                🔍
-              </button>
-            </form>
+                <Link to="/wishlist" className="relative text-ink/70 hover:text-deal-500 transition" title="Wishlist">
+                  <Heart className="w-6 h-6" strokeWidth={1.75} />
+                  {wishlist.length > 0 && (
+                    <span className="absolute -top-1.5 -right-1.5 bg-deal-500 text-white text-[11px] font-semibold rounded-full min-w-[20px] h-[20px] flex items-center justify-center border-2 border-cream">
+                      {wishlist.length}
+                    </span>
+                  )}
+                </Link>
 
-            <div className="flex items-center gap-3 sm:gap-4">
-              {isAuthenticated ? (
-                <>
-                  <Link to="/dashboard" className="text-ink hover:text-primary-600 font-bold transition hidden sm:inline">
-                    Shop
-                  </Link>
+                <Link to="/cart" className="relative text-ink/70 hover:text-primary-700 transition" title="Cart">
+                  <ShoppingBag className="w-6 h-6" strokeWidth={1.75} />
+                  {cartItemCount > 0 && (
+                    <span className="absolute -top-1.5 -right-1.5 bg-primary-600 text-white text-[11px] font-semibold rounded-full min-w-[20px] h-[20px] flex items-center justify-center border-2 border-cream animate-pop">
+                      {cartItemCount}
+                    </span>
+                  )}
+                </Link>
 
-                  <Link to="/wishlist" className="relative text-ink hover:text-deal-500 transition" title="Wishlist">
-                    <span className="text-2xl">♡</span>
-                    {wishlist.length > 0 && (
-                      <span className="absolute -top-1.5 -right-1.5 bg-deal-500 text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-white">
-                        {wishlist.length}
-                      </span>
-                    )}
-                  </Link>
-
-                  <Link to="/cart" className="relative text-ink hover:text-primary-600 transition" title="Cart">
-                    <span className="text-2xl">🛒</span>
-                    {cartItemCount > 0 && (
-                      <span className="absolute -top-1.5 -right-1.5 bg-flash-500 text-ink text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center border-2 border-white animate-pop">
-                        {cartItemCount}
-                      </span>
-                    )}
-                  </Link>
-
-                  <div className="relative" ref={profileRef}>
-                    <button
-                      onClick={() => setProfileOpen((prev) => !prev)}
-                      className="flex items-center gap-2 text-gray-700 hover:text-primary-700 transition"
-                    >
-                      <span className="w-9 h-9 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center text-sm font-bold overflow-hidden border-2 border-primary-300">
-                        {user?.avatarUrl ? (
-                          <img src={user.avatarUrl} alt={user.name} className="w-full h-full object-cover" />
-                        ) : (
-                          user?.name?.[0]?.toUpperCase() || 'U'
-                        )}
-                      </span>
-                    </button>
-
-                    {profileOpen && (
-                      <div className="absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-card border border-gray-100 py-1 z-50 overflow-hidden">
-                        <div className="px-4 py-3 border-b border-gray-50 bg-primary-50">
-                          <p className="text-sm font-bold text-ink truncate">{user?.name}</p>
-                          <p className="text-xs text-gray-500 truncate">{user?.email}</p>
-                        </div>
-                        <Link to="/profile" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-primary-50">
-                          My Profile
-                        </Link>
-                        <Link to="/orders" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-primary-50">
-                          My Orders
-                        </Link>
-                        <Link to="/wishlist" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-primary-50 sm:hidden">
-                          Wishlist
-                        </Link>
-                        {user?.role === 'admin' && (
-                          <Link to="/admin" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm font-bold text-deal-600 hover:bg-deal-50">
-                            Admin Dashboard
-                          </Link>
-                        )}
-                        <button
-                          onClick={handleLogout}
-                          className="block w-full text-left px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 border-t border-gray-50"
-                        >
-                          Logout
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                </>
-              ) : (
-                <>
-                  <Link to="/login" className="text-ink hover:text-primary-600 font-bold transition">
-                    Login
-                  </Link>
-                  <Link
-                    to="/signup"
-                    className="bg-deal-500 hover:bg-deal-600 text-white px-5 py-2 rounded-full font-bold transition shadow-pop"
+                <div className="relative" ref={profileRef}>
+                  <button
+                    onClick={() => setProfileOpen((prev) => !prev)}
+                    className="flex items-center gap-2 text-ink/70 hover:text-primary-700 transition"
                   >
-                    Sign Up
-                  </Link>
-                </>
-              )}
-            </div>
+                    <span className="w-10 h-10 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center text-base font-semibold overflow-hidden border border-primary-200">
+                      {user?.avatarUrl ? (
+                        <img src={user.avatarUrl} alt={user.name} className="w-full h-full object-cover" />
+                      ) : (
+                        user?.name?.[0]?.toUpperCase() || 'U'
+                      )}
+                    </span>
+                  </button>
+
+                  {profileOpen && (
+                    <div className="absolute right-0 mt-2 w-52 bg-white rounded-xl shadow-card border border-stone-200 py-1 z-50 overflow-hidden">
+                      <div className="px-4 py-3 border-b border-stone-100 bg-primary-50/60">
+                        <p className="text-sm font-semibold text-ink truncate">{user?.name}</p>
+                        <p className="text-xs text-ink/50 truncate">{user?.email}</p>
+                      </div>
+                      <Link to="/profile" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm text-ink/70 hover:bg-primary-50">
+                        My profile
+                      </Link>
+                      <Link to="/orders" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm text-ink/70 hover:bg-primary-50">
+                        My orders
+                      </Link>
+                      <Link to="/wishlist" onClick={() => setProfileOpen(false)} className="block px-4 py-2 text-sm text-ink/70 hover:bg-primary-50 sm:hidden">
+                        Wishlist
+                      </Link>
+                      {user?.role === 'admin' && (
+                        <Link to="/admin" onClick={() => setProfileOpen(false)} className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-primary-700 hover:bg-primary-50">
+                          <LayoutDashboard className="w-3.5 h-3.5" strokeWidth={1.75} /> Admin dashboard
+                        </Link>
+                      )}
+                      <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-2 w-full text-left px-4 py-2 text-sm text-deal-600 hover:bg-deal-50 border-t border-stone-100"
+                      >
+                        <LogOut className="w-3.5 h-3.5" strokeWidth={1.75} /> Log out
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="text-[15px] text-ink/70 hover:text-primary-700 font-medium transition">
+                  Log in
+                </Link>
+                <Link
+                  to="/signup"
+                  className="bg-primary-600 hover:bg-primary-700 text-white text-sm px-5 py-2 rounded-full font-medium transition"
+                >
+                  Sign up
+                </Link>
+              </>
+            )}
           </div>
         </div>
-      </nav>
+      </div>
     </div>
   );
 };
