@@ -1,66 +1,97 @@
-import { NavLink, Outlet, Link } from 'react-router-dom';
-
-const navItems = [
-  { to: '/admin', label: 'Dashboard', icon: '📊', end: true },
-  { to: '/admin/products', label: 'Products', icon: '🛒' },
-  { to: '/admin/categories', label: 'Categories', icon: '🗂️' },
-  { to: '/admin/orders', label: 'Orders', icon: '📦' },
-  { to: '/admin/users', label: 'Users', icon: '👥' },
-  { to: '/admin/reviews', label: 'Reviews', icon: '⭐' },
-];
+import { useState } from 'react';
+import { Link, NavLink, Outlet } from 'react-router-dom';
+import { 
+  LayoutDashboard, Package, ShoppingBag, Users, Star, 
+  FolderTree, Menu, X, LogOut 
+} from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 const AdminLayout = () => {
+  const { logout } = useAuth();
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  const navItems = [
+    { to: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
+    { to: '/admin/products', icon: Package, label: 'Products' },
+    { to: '/admin/orders', icon: ShoppingBag, label: 'Orders' },
+    { to: '/admin/users', icon: Users, label: 'Users' },
+    { to: '/admin/reviews', icon: Star, label: 'Reviews' },
+    { to: '/admin/categories', icon: FolderTree, label: 'Categories' },
+  ];
+
   return (
-    <div className="min-h-[calc(100vh-4rem)] bg-gray-50 flex">
-      <aside className="w-60 bg-ink text-gray-200 flex-shrink-0 hidden md:flex flex-col">
-        <div className="p-5 border-b border-white/10">
-          <Link to="/" className="flex items-center gap-2">
-            <span className="text-2xl">🛒</span>
-            <span className="font-display font-extrabold text-white text-lg">FreshCart</span>
+    <div className="flex min-h-screen bg-cream">
+      {/* Sidebar */}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 w-64 bg-ink text-white transform transition-transform duration-300 ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        } lg:translate-x-0 lg:static lg:w-64 flex-shrink-0`}
+      >
+        <div className="flex items-center justify-between p-5 border-b border-white/10">
+          <Link to="/admin" className="text-2xl font-display font-extrabold tracking-tight">
+            🛒 Admin
           </Link>
-          <p className="text-xs text-gray-400 mt-1">Admin Panel</p>
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="lg:hidden text-white/70 hover:text-white"
+          >
+            <X size={24} />
+          </button>
         </div>
-        <nav className="flex-1 py-4">
-          {navItems.map((item) => (
+
+        <nav className="p-4 space-y-1">
+          {navItems.map(({ to, icon: Icon, label }) => (
             <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.end}
+              key={to}
+              to={to}
+              end={to === '/admin'}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-5 py-3 text-sm font-medium transition ${
-                  isActive ? 'bg-primary-600 text-white' : 'text-gray-300 hover:bg-white/5 hover:text-white'
+                `flex items-center gap-3 px-4 py-3 rounded-xl transition ${
+                  isActive
+                    ? 'bg-primary-600 text-white shadow-md'
+                    : 'text-white/70 hover:bg-white/10 hover:text-white'
                 }`
               }
             >
-              <span className="text-lg">{item.icon}</span>
-              {item.label}
+              <Icon size={20} />
+              <span className="font-medium">{label}</span>
             </NavLink>
           ))}
         </nav>
-        <div className="p-4 border-t border-white/10">
-          <Link to="/dashboard" className="text-sm text-gray-400 hover:text-white transition flex items-center gap-2">
-            ← Back to Shop
-          </Link>
+
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-white/10">
+          <button
+            onClick={logout}
+            className="flex items-center gap-3 px-4 py-3 w-full rounded-xl text-white/70 hover:bg-white/10 hover:text-white transition"
+          >
+            <LogOut size={20} />
+            <span className="font-medium">Logout</span>
+          </button>
         </div>
       </aside>
 
-      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-ink z-40 flex justify-around py-2 border-t border-white/10">
-        {navItems.map((item) => (
-          <NavLink
-            key={item.to}
-            to={item.to}
-            end={item.end}
-            className={({ isActive }) => `text-xl px-2 ${isActive ? 'text-flash-400' : 'text-gray-400'}`}
-            title={item.label}
+      {/* Main content */}
+      <div className="flex-1 flex flex-col min-h-screen">
+        {/* Top bar */}
+        <header className="bg-white/80 backdrop-blur-sm sticky top-0 z-40 p-4 border-b border-gray-100 flex items-center justify-between lg:justify-end">
+          <button
+            onClick={() => setSidebarOpen(true)}
+            className="lg:hidden text-ink"
           >
-            {item.icon}
-          </NavLink>
-        ))}
-      </div>
+            <Menu size={28} />
+          </button>
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-ink/50 hidden sm:inline">Welcome back, Admin</span>
+            <div className="w-9 h-9 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center font-bold">
+              A
+            </div>
+          </div>
+        </header>
 
-      <main className="flex-1 overflow-x-hidden pb-16 md:pb-0">
-        <Outlet />
-      </main>
+        <main className="flex-1 p-6 lg:p-8">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 };

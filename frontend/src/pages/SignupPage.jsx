@@ -27,9 +27,14 @@ const SignupPage = () => {
 
     setLoading(true);
     try {
-      await signup(formData.name, formData.email, formData.password, formData.phone);
+      const user = await signup(formData.name, formData.email, formData.password, formData.phone);
       toast.success('Account created! Welcome to FreshCart.');
-      navigate('/dashboard');
+      // Redirect based on role (usually 'customer', but keep logic)
+      if (user?.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err) {
       toast.error(err.message || 'Signup failed');
     } finally {

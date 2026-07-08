@@ -25,6 +25,10 @@ import AdminCategoriesPage from './pages/admin/AdminCategoriesPage';
 import AdminOrdersPage from './pages/admin/AdminOrdersPage';
 import AdminUsersPage from './pages/admin/AdminUsersPage';
 import AdminReviewsPage from './pages/admin/AdminReviewsPage';
+import ContactPage from './pages/ContactPage';
+import FAQPage from './pages/FAQPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import TermsPage from './pages/TermsPage';
 
 const StorefrontLayout = ({ children }) => (
   <div className="flex flex-col min-h-screen">
@@ -53,6 +57,10 @@ function App() {
               <Route path="/orders" element={<StorefrontLayout><ProtectedRoute><OrdersPage /></ProtectedRoute></StorefrontLayout>} />
               <Route path="/orders/:id" element={<StorefrontLayout><ProtectedRoute><OrderDetailPage /></ProtectedRoute></StorefrontLayout>} />
               <Route path="/profile" element={<StorefrontLayout><ProtectedRoute><ProfilePage /></ProtectedRoute></StorefrontLayout>} />
+              <Route path="/contact" element={<StorefrontLayout><ContactPage /></StorefrontLayout>} />
+              <Route path="/faq" element={<StorefrontLayout><FAQPage /></StorefrontLayout>} />
+              <Route path="/privacy-policy" element={<StorefrontLayout><PrivacyPolicyPage /></StorefrontLayout>} />
+              <Route path="/terms" element={<StorefrontLayout><TermsPage /></StorefrontLayout>} />
 
               <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
                 <Route index element={<AdminDashboardPage />} />

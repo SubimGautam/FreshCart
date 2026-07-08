@@ -17,9 +17,14 @@ const LoginPage = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await login(formData.email, formData.password);
+      const user = await login(formData.email, formData.password);
       toast.success('Welcome back!');
-      navigate('/dashboard');
+      // Redirect based on role
+      if (user?.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err) {
       toast.error(err.message || 'Login failed');
     } finally {

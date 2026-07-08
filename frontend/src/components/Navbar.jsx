@@ -50,7 +50,7 @@ const Navbar = () => {
   return (
     <div className="sticky top-0 z-50 bg-cream/95 backdrop-blur-sm border-b border-stone-200">
       <div className="max-w-[1920px] mx-auto px-4 sm:px-6 lg:px-6">
-        <div className={`flex items-center h-16 gap-6 ${isLandingPage ? 'justify-start' : 'justify-between'}`}>
+        <div className="flex items-center h-16 gap-6 justify-between">
           <Link to={logoTarget} onClick={handleLogoClick} className="flex items-center gap-2 flex-shrink-0">
             <span className="w-8 h-8 rounded-full bg-primary-600 flex items-center justify-center">
               <Leaf className="w-4 h-4 text-white" strokeWidth={2} />
